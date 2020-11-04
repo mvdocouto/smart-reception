@@ -15,11 +15,53 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  const data = req.body;
+  console.log("req.body", req.body);
+  const {
+    evento,
+    date,
+    inicio,
+    termino,
+    tipo,
+    ministro,
+    musicas,
+    pregador,
+    houveApelo,
+    totalConversoes,
+    totalPresentes,
+    totalVisitantes,
+    totalWeb,
+    totalCarros,
+    totalMotos,
+    observacoes,
+    colaboradores,
+  } = req.body;
+
   const eventID = db.events.create({
-      name: data.name,
-      email: data.email,
+    evento: evento,
+    date: date,
+    inicio: inicio,
+    termino: termino,
+    tipo: tipo,
+    ministro: ministro,
+    musicas: musicas,
+    pregador: pregador,
+    houveApelo: houveApelo,
+    totalConversoes: totalConversoes,
+    totalPresentes: totalPresentes,
+    totalVisitantes: totalVisitantes,
+    totalWeb: totalWeb,
+    totalCarros: totalCarros,
+    totalMotos: totalMotos,
+    observacoes: observacoes,
   });
+
+  for (colaborador of colaboradores) {
+    db.collaborators.create({
+      nome: colaborador.nome,
+      local: colaborador.local,
+      eventID: eventID,
+    });
+  }
 
   const event = db.events.get(eventID);
   res.status(201).json(event);
